@@ -27,6 +27,10 @@
     user-select: none;
 }
 
+body {
+    filter: none;
+}
+
 .theme-icon , .clear-icon {
     position: absolute;
     width: 40px;

@@ -24,11 +24,13 @@ btn.addEventListener("click", () => {
             updateDisplay(amount);
             window.localStorage.setItem('score', JSON.stringify(amount));
         }, 1000);
+        document.body.style.filter = ""; // Remove the filter
         console.log("Stopwatch started!");
     } else {
         // Pause the stopwatch
         clearInterval(intervalId);
         intervalId = null;
+        document.body.style.filter = "brightness(1500%) contrast(40%)"; // Add the filter
         console.log("Stopwatch paused!");
     }
 });
@@ -38,6 +40,7 @@ btn_reset.addEventListener("click", () => {
         amount = 0;
         updateDisplay(amount);
         window.localStorage.removeItem("score");
+        document.body.style.filter = ""; // Ensure filter is removed when reset
         console.log("Amount reset!");
     }
 });
