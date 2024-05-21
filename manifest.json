@@ -1,6 +1,6 @@
 {
-    "name": "StopWatch",
-    "short_name": "Stop-The-Watch",
+    "name": "Stop-Watch",
+    "short_name": "Stop-W",
     "start_url": "/Stop-The-Watch/index.html",
     "icons": [
         {
