@@ -58,7 +58,7 @@ body {
 
 .page-grid {
     display: grid;
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     width: 100%;
     height: auto;
     row-gap: 20px;
@@ -67,28 +67,24 @@ body {
 }
 
 .cell {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     width: 100%;
-    height: 200px;
+    height: auto;
     /* background-color: gray; */
-}
-
-h2 {
-    font-family: var(--primary-font-family);
-    color: var(--primary-text-color);
-    font-size: var(--medium-font-size);
-    font-weight: var(--semiBold-font-weight);
-    text-transform: uppercase;
 }
 
 p {
     font-family: var(--primary-font-family);
     color: var(--primary-text-color);
-    font-size: var(--big-font-size);
+    font-size: var(--medium-font-size);
     font-weight: var(--bold-font-weight);
+    position: absolute;
+    top: calc(50vh - (350px /100px / 2));
+    left: calc(50vw - (350px /140px / 2)); 
 }
 
 .btn-flex {
@@ -102,19 +98,9 @@ p {
     fill: var(--primary-text-color);
 }
 
-.add {
-    width: 66px;
-    height: 156px;
-    rotate: 90deg;
-    background-color: var(--primary-btn-color);
-    border-radius: 30px;
-    
-}
-
-.sub {
-    width: 45px;
-    height: 96px;
-    rotate: -90deg;
-    background-color: var(--secondary-btn-color);
-    border-radius: 30px;
+.clock {
+    width: 350px;
+    height: 350px;
+    z-index: 1;
+    fill: var(--primary-btn-color);
 }

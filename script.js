@@ -1,56 +1,59 @@
 let score = document.getElementsByClassName("score")[0];
-let btn_add = document.getElementsByClassName("btn")[0];
-let btn_sub = document.getElementsByClassName("btn")[1];
+let btn = document.getElementsByClassName("clock")[0];
 let btn_reset = document.getElementsByClassName("clear-icon")[0];
 let theme_icon = document.getElementsByClassName("theme-icon")[0];
 
-var amount = 0;
-var factor = 100;
-const units = ["ml", "L"];
+let amount = 0;
+const factor = 1;
+let intervalId = null;
+const units = [""];
 
-if (window.localStorage.getItem('score') != null) {
+// Load previous amount if available
+if (window.localStorage.getItem('score') !== null) {
     amount = JSON.parse(window.localStorage.getItem('score'));
-    if (amount < 900) {
-        score.textContent = amount + units[0];
-        console.log("Success reload ml");
-    } else {
-        score.textContent = amount / 1000 + units[1];
-        console.log("Success reload L");
-    }
+    updateDisplay(amount);
 } else {
-    console.log("Fail reload, continue?");
+    console.log("No previous data found, starting fresh.");
 }
 
-btn_add.addEventListener("click", () => {
-    amount += factor;
-    if (amount < 900) {
-        score.textContent = amount + units[0];
+btn.addEventListener("click", () => {
+    if (intervalId === null) {
+        // Start the stopwatch
+        intervalId = setInterval(() => {
+            amount += factor;
+            updateDisplay(amount);
+            window.localStorage.setItem('score', JSON.stringify(amount));
+        }, 1000);
+        console.log("Stopwatch started!");
     } else {
-        score.textContent = amount / 1000 + units[1];
+        // Pause the stopwatch
+        clearInterval(intervalId);
+        intervalId = null;
+        console.log("Stopwatch paused!");
     }
-    window.localStorage.setItem('score', JSON.stringify(amount));
-});
-
-btn_sub.addEventListener("click", () => {
-    if (amount != 0) {
-        amount -= factor;
-    }
-    if (amount < 900) {
-        score.textContent = amount + units[0];
-    } else {
-        score.textContent = amount / 1000 + units[1];
-    }
-    window.localStorage.setItem('score', JSON.stringify(amount));
 });
 
 btn_reset.addEventListener("click", () => {
-    if (amount != 0) {
+    if (amount !== 0) {
         amount = 0;
-        score.textContent = amount + units[0];
+        updateDisplay(amount);
         window.localStorage.removeItem("score");
         console.log("Amount reset!");
     }
 });
+
+function updateDisplay(amount) {
+    const hours = Math.floor(amount / 3600);
+    const minutes = Math.floor((amount % 3600) / 60);
+    const seconds = amount % 60;
+    
+    const formattedTime = 
+        String(hours).padStart(2, '0') + ":" +
+        String(minutes).padStart(2, '0') + ":" +
+        String(seconds).padStart(2, '0');
+
+    score.textContent = formattedTime;
+}
 
 let theme_result = [];
 let theme_index = 0;
