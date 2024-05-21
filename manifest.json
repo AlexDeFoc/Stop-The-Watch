@@ -1,7 +1,7 @@
 {
-    "name": "Ocean-Intake",
-    "short_name": "H2O-Intake",
-    "start_url": "/Ocean-Intake/index.html",
+    "name": "StopWatch",
+    "short_name": "Stop-The-Watch",
+    "start_url": "/Stop-The-Watch/index.html",
     "icons": [
         {
           "src": "./icons/manifest-icon-192.maskable.png",
