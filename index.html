@@ -4,46 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <title>STOP</title>
+    <title>H2O DEV</title>
     <meta id="theme-url" name="theme-color" content="#000000"/>
-    <link rel="manifest" href="manifest.json">
     <link rel="icon" href="./favicon.ico">
-    
+    <link rel="manifest" href="./manifest.json">
     <script>
-                if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(registration => {
-                registration.onupdatefound = () => {
-                    const installingWorker = registration.installing;
-                    installingWorker.onstatechange = () => {
-                        if (installingWorker.state === 'installed') {
-                            if (navigator.serviceWorker.controller) {
-                                // New update available
-                                console.log('New or updated content is available.');
-                                // Optional: Prompt user to refresh or force the update
-                                if (confirm('New version available. Refresh to update?')) {
-                                    window.location.reload();
-                                }
-                            } else {
-                                // Content cached for offline use
-                                console.log('Content is cached for offline use.');
-                            }
-                        }
-                    };
-                };
-            }).catch(error => {
-                console.error('Error during service worker registration:', error);
-            });
-
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                console.log('Service worker controller changed');
-                // This fires when the service worker controlling the page changes
-                window.location.reload();
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+            .then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch(function(error) {
+                console.log('Service Worker registration failed:', error);
             });
         }
     </script>
-    
 </head>
-<body> 
+<body>
     <svg class="theme-icon" fill="#000000" height="800px" width="800px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
         viewBox="0 0 490 490" xml:space="preserve">
         <g>
@@ -75,7 +51,7 @@
 
     <div class="page-grid">
         <div class="cell">
-            <p class="score">00:00:01</p>
+            <p class="score">00:00:00/p>
             <svg class="clock" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
                 width="800px" height="800px" viewBox="0 0 595.021 595.021"
                 xml:space="preserve">
