@@ -4,7 +4,7 @@ let btn_reset = document.getElementsByClassName("clear-icon")[0];
 let theme_icon = document.getElementsByClassName("theme-icon")[0];
 
 let amount = 0;
-const factor = 1;
+const factor = 10; // Update every 10 milliseconds
 let intervalId = null;
 
 // Load previous amount and running status if available
@@ -44,14 +44,14 @@ function startClock() {
     if (intervalId !== null) return; // Avoid starting multiple intervals
 
     // Update the lastTimestamp and running status in localStorage when starting
-    window.localStorage.setItem('lastTimestamp', JSON.stringify(Math.floor(Date.now() / 1000)));
+    window.localStorage.setItem('lastTimestamp', JSON.stringify(Date.now()));
     window.localStorage.setItem('running', JSON.stringify(true));
 
     intervalId = setInterval(() => {
         amount += factor;
         updateDisplay(amount);
         window.localStorage.setItem('score', JSON.stringify(amount));
-    }, 1000);
+    }, factor);
 
     btn.classList.remove("stripes"); // Remove the filter
     console.log("Stopwatch started!");
@@ -67,14 +67,25 @@ function pauseClock() {
 }
 
 function updateDisplay(amount) {
-    const hours = Math.floor(amount / 3600);
-    const minutes = Math.floor((amount % 3600) / 60);
-    const seconds = amount % 60;
+    const milliseconds = amount % 1000;
+    const totalSeconds = Math.floor(amount / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
 
-    const formattedTime = 
-        String(hours).padStart(2, '0') + ":" +
-        String(minutes).padStart(2, '0') + ":" +
-        String(seconds).padStart(2, '0');
+    let formattedTime;
+
+    if (totalSeconds < 3600) {
+        formattedTime = 
+            String(minutes).padStart(2, '0') + ":" +
+            String(seconds).padStart(2, '0') + ":" +
+            String(Math.floor(milliseconds / 10)).padStart(2, '0');
+    } else {
+        formattedTime = 
+            String(hours).padStart(2, '0') + ":" +
+            String(minutes).padStart(2, '0') + ":" +
+            String(seconds).padStart(2, '0');
+    }
 
     score.textContent = formattedTime;
 }
