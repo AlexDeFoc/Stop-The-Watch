@@ -7,15 +7,19 @@ let amount = 0;
 const factor = 1;
 let intervalId = null;
 
-// Load previous amount and timestamp if available
+// Load previous amount and running status if available
 if (window.localStorage.getItem('score') !== null) {
     amount = JSON.parse(window.localStorage.getItem('score'));
     updateDisplay(amount);
     console.log("Loaded previous score: ", amount);
 }
 
-// Start the clock immediately after the page loads
-startClock();
+let wasRunning = JSON.parse(window.localStorage.getItem('running'));
+
+// Start the clock if it was running before reload
+if (wasRunning) {
+    startClock();
+}
 
 btn.addEventListener("click", () => {
     if (intervalId === null) {
@@ -39,8 +43,9 @@ btn_reset.addEventListener("click", () => {
 function startClock() {
     if (intervalId !== null) return; // Avoid starting multiple intervals
 
-    // Update the lastTimestamp in localStorage when starting
+    // Update the lastTimestamp and running status in localStorage when starting
     window.localStorage.setItem('lastTimestamp', JSON.stringify(Math.floor(Date.now() / 1000)));
+    window.localStorage.setItem('running', JSON.stringify(true));
 
     intervalId = setInterval(() => {
         amount += factor;
@@ -56,6 +61,7 @@ function pauseClock() {
     clearInterval(intervalId);
     intervalId = null;
     window.localStorage.removeItem('lastTimestamp');
+    window.localStorage.setItem('running', JSON.stringify(false));
     document.body.style.filter = "brightness(1500%) contrast(40%)"; // Add the filter
     console.log("Stopwatch paused!");
 }
