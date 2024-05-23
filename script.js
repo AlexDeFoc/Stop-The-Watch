@@ -6,27 +6,16 @@ let theme_icon = document.getElementsByClassName("theme-icon")[0];
 let amount = 0;
 const factor = 1;
 let intervalId = null;
-const units = [""];
 
 // Load previous amount and timestamp if available
 if (window.localStorage.getItem('score') !== null) {
     amount = JSON.parse(window.localStorage.getItem('score'));
     updateDisplay(amount);
-} else {
-    console.log("No previous data found, starting fresh.");
+    console.log("Loaded previous score: ", amount);
 }
 
-// Check if the clock was running before the reload
-if (window.localStorage.getItem('lastTimestamp') !== null) {
-    const lastTimestamp = JSON.parse(window.localStorage.getItem('lastTimestamp'));
-    const now = Math.floor(Date.now() / 1000);
-    const elapsed = now - lastTimestamp;
-    amount += elapsed;
-    updateDisplay(amount);
-    startClock(); // Start the clock automatically if it was running
-} else {
-    console.log("Clock was not running before reload.");
-}
+// Start the clock immediately after the page loads
+startClock();
 
 btn.addEventListener("click", () => {
     if (intervalId === null) {
@@ -41,7 +30,6 @@ btn_reset.addEventListener("click", () => {
         amount = 0;
         updateDisplay(amount);
         window.localStorage.removeItem("score");
-        window.localStorage.removeItem("lastTimestamp");
         document.body.style.filter = ""; // Ensure filter is removed when reset
         console.log("Amount reset!");
         pauseClock(); // Make sure to clear any running intervals
@@ -49,12 +37,17 @@ btn_reset.addEventListener("click", () => {
 });
 
 function startClock() {
+    if (intervalId !== null) return; // Avoid starting multiple intervals
+
+    // Update the lastTimestamp in localStorage when starting
+    window.localStorage.setItem('lastTimestamp', JSON.stringify(Math.floor(Date.now() / 1000)));
+
     intervalId = setInterval(() => {
         amount += factor;
         updateDisplay(amount);
         window.localStorage.setItem('score', JSON.stringify(amount));
     }, 1000);
-    window.localStorage.setItem('lastTimestamp', JSON.stringify(Math.floor(Date.now() / 1000)));
+
     document.body.style.filter = ""; // Remove the filter
     console.log("Stopwatch started!");
 }
@@ -71,7 +64,7 @@ function updateDisplay(amount) {
     const hours = Math.floor(amount / 3600);
     const minutes = Math.floor((amount % 3600) / 60);
     const seconds = amount % 60;
-    
+
     const formattedTime = 
         String(hours).padStart(2, '0') + ":" +
         String(minutes).padStart(2, '0') + ":" +
