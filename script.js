@@ -67,32 +67,24 @@ function pauseClock() {
 }
 
 function updateDisplay(amount) {
-    const totalMillis = amount % 60000; // 60000 ms in a minute
-    const millis = Math.floor(totalMillis / 10) % 60; // Restrict to 59 milliseconds
-    const totalSeconds = Math.floor(amount / 1000);
+    const totalMillis = Math.floor(amount / 10); // Convert to pseudo-milliseconds (1-59 range)
+    const millis = totalMillis % 60;
+    const totalSeconds = Math.floor(totalMillis / 60);
+    const minutes = Math.floor(totalSeconds / 60) % 60;
     const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
     let formattedTime;
 
-    if (hours === 0 && minutes === 0 && seconds < 60) {
+    if (hours === 0 && minutes === 0 && totalSeconds < 60) {
         // Display milliseconds only
-        formattedTime = String(millis).padStart(2, '0');
+        formattedTime = String(seconds).padStart(2, '0') + ":" + String(millis).padStart(2, '0');
     } else if (hours === 0 && minutes < 60) {
-        // Display minutes and seconds
+        // Display minutes, seconds, and milliseconds
         formattedTime = 
             String(minutes).padStart(2, '0') + ":" +
-            String(seconds).padStart(2, '0');
-        if (millis > 0) {
-            formattedTime += ":" + String(millis).padStart(2, '0');
-        }
-    } else if (hours < 60) {
-        // Display hours, minutes, and seconds
-        formattedTime = 
-            String(hours).padStart(2, '0') + ":" +
-            String(minutes).padStart(2, '0') + ":" +
-            String(seconds).padStart(2, '0');
+            String(seconds).padStart(2, '0') + ":" +
+            String(millis).padStart(2, '0');
     } else {
         // Display hours, minutes, and seconds without milliseconds
         formattedTime = 
