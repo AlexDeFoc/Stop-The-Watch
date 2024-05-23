@@ -8,6 +8,8 @@ const factor = 1;
 let intervalId = null;
 const units = [""];
 
+let lastTimestamp = null;
+
 // Load previous amount if available
 if (window.localStorage.getItem('score') !== null) {
     amount = JSON.parse(window.localStorage.getItem('score'));
@@ -19,19 +21,10 @@ if (window.localStorage.getItem('score') !== null) {
 btn.addEventListener("click", () => {
     if (intervalId === null) {
         // Start the stopwatch
-        intervalId = setInterval(() => {
-            amount += factor;
-            updateDisplay(amount);
-            window.localStorage.setItem('score', JSON.stringify(amount));
-        }, 1000);
-        document.body.style.filter = ""; // Remove the filter
-        console.log("Stopwatch started!");
+        startStopwatch();
     } else {
         // Pause the stopwatch
-        clearInterval(intervalId);
-        intervalId = null;
-        document.body.style.filter = "brightness(1500%) contrast(40%)"; // Add the filter
-        console.log("Stopwatch paused!");
+        pauseStopwatch();
     }
 });
 
@@ -45,6 +38,23 @@ btn_reset.addEventListener("click", () => {
     }
 });
 
+function startStopwatch() {
+    intervalId = setInterval(() => {
+        amount += factor;
+        updateDisplay(amount);
+        window.localStorage.setItem('score', JSON.stringify(amount));
+    }, 1000);
+    document.body.style.filter = ""; // Remove the filter
+    console.log("Stopwatch started!");
+}
+
+function pauseStopwatch() {
+    clearInterval(intervalId);
+    intervalId = null;
+    document.body.style.filter = "brightness(1500%) contrast(40%)"; // Add the filter
+    console.log("Stopwatch paused!");
+}
+
 function updateDisplay(amount) {
     const hours = Math.floor(amount / 3600);
     const minutes = Math.floor((amount % 3600) / 60);
@@ -57,6 +67,28 @@ function updateDisplay(amount) {
 
     score.textContent = formattedTime;
 }
+
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        // App is in the background
+        lastTimestamp = Date.now();
+        if (intervalId !== null) {
+            pauseStopwatch();
+        }
+    } else {
+        // App is in the foreground
+        if (lastTimestamp !== null) {
+            const elapsed = Math.floor((Date.now() - lastTimestamp) / 1000);
+            amount += elapsed * factor;
+            updateDisplay(amount);
+            window.localStorage.setItem('score', JSON.stringify(amount));
+            lastTimestamp = null;
+        }
+        if (intervalId === null && lastTimestamp !== null) {
+            startStopwatch();
+        }
+    }
+});
 
 let theme_result = [];
 let theme_index = 0;
@@ -119,9 +151,4 @@ theme_icon.addEventListener("click", () => {
     } else {
         console.error('No themes available');
     }
-});
-
-document.body.addEventListener("blur", (event) => {
-    // console.log(event);
-    document.getElementsByClassName("score")[0].textContent = event;
 });
