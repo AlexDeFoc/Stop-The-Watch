@@ -72,9 +72,6 @@ document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
         // App is in the background
         lastTimestamp = Date.now();
-        if (intervalId !== null) {
-            pauseStopwatch();
-        }
     } else {
         // App is in the foreground
         if (lastTimestamp !== null) {
@@ -84,6 +81,7 @@ document.addEventListener("visibilitychange", () => {
             window.localStorage.setItem('score', JSON.stringify(amount));
             lastTimestamp = null;
         }
+        // Ensure the stopwatch is running
         if (intervalId === null) {
             startStopwatch();
         }
