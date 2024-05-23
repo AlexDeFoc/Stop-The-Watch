@@ -4,7 +4,7 @@ let btn_reset = document.getElementsByClassName("clear-icon")[0];
 let theme_icon = document.getElementsByClassName("theme-icon")[0];
 
 let amount = 0;
-const factor = 1;
+const factor = 10; // Update every 10 milliseconds
 let intervalId = null;
 
 // Load previous amount and running status if available
@@ -44,16 +44,16 @@ function startClock() {
     if (intervalId !== null) return; // Avoid starting multiple intervals
 
     // Update the lastTimestamp and running status in localStorage when starting
-    window.localStorage.setItem('lastTimestamp', JSON.stringify(Math.floor(Date.now() / 1000)));
+    window.localStorage.setItem('lastTimestamp', JSON.stringify(Date.now()));
     window.localStorage.setItem('running', JSON.stringify(true));
 
     intervalId = setInterval(() => {
         amount += factor;
         updateDisplay(amount);
         window.localStorage.setItem('score', JSON.stringify(amount));
-    }, 1000);
+    }, factor);
 
-    document.body.style.filter = ""; // Remove the filter
+    btn.classList.remove("stripes"); // Remove the filter
     console.log("Stopwatch started!");
 }
 
@@ -62,19 +62,36 @@ function pauseClock() {
     intervalId = null;
     window.localStorage.removeItem('lastTimestamp');
     window.localStorage.setItem('running', JSON.stringify(false));
-    document.body.style.filter = "brightness(1500%) contrast(40%)"; // Add the filter
+    btn.classList.add("stripes"); // Add the filter
     console.log("Stopwatch paused!");
 }
 
 function updateDisplay(amount) {
-    const hours = Math.floor(amount / 3600);
-    const minutes = Math.floor((amount % 3600) / 60);
-    const seconds = amount % 60;
+    const totalMillis = Math.floor(amount / 10); // Convert to pseudo-milliseconds (1-59 range)
+    const millis = totalMillis % 60;
+    const totalSeconds = Math.floor(totalMillis / 60);
+    const minutes = Math.floor(totalSeconds / 60) % 60;
+    const hours = Math.floor(totalSeconds / 3600);
+    const seconds = totalSeconds % 60;
 
-    const formattedTime = 
-        String(hours).padStart(2, '0') + ":" +
-        String(minutes).padStart(2, '0') + ":" +
-        String(seconds).padStart(2, '0');
+    let formattedTime;
+
+    if (hours === 0 && minutes === 0 && totalSeconds < 60) {
+        // Display milliseconds only
+        formattedTime = String(seconds).padStart(2, '0') + ":" + String(millis).padStart(2, '0');
+    } else if (hours === 0 && minutes < 60) {
+        // Display minutes, seconds, and milliseconds
+        formattedTime = 
+            String(minutes).padStart(2, '0') + ":" +
+            String(seconds).padStart(2, '0') + ":" +
+            String(millis).padStart(2, '0');
+    } else {
+        // Display hours, minutes, and seconds without milliseconds
+        formattedTime = 
+            String(hours).padStart(2, '0') + ":" +
+            String(minutes).padStart(2, '0') + ":" +
+            String(seconds).padStart(2, '0');
+    }
 
     score.textContent = formattedTime;
 }
@@ -109,7 +126,6 @@ function applyTheme(theme) {
     document.documentElement.style.setProperty("--primary-background-color", theme["--primary-background-color"]);
     document.documentElement.style.setProperty("--primary-text-color", theme["--primary-text-color"]);
     document.documentElement.style.setProperty("--primary-btn-color", theme["--primary-btn-color"]);
-    document.documentElement.style.setProperty("--secondary-btn-color", theme["--secondary-btn-color"]);
     document.documentElement.style.setProperty("--theme-icon-fill", theme["--theme-icon-fill"]);
     document.getElementById('theme-url').setAttribute("content", theme["theme-url-color"]);
 }

@@ -18,6 +18,8 @@
     --medium-font-size: 64px;
     --small-font-size: 32px;
     --very-small-font-size: 20px;
+
+    --angle: 15deg;
 }
 
 * {
@@ -25,10 +27,6 @@
     margin: 0;
     padding: 0;
     user-select: none;
-}
-
-body {
-    filter: none;
 }
 
 .theme-icon , .clear-icon {
@@ -108,3 +106,20 @@ p {
     z-index: 1;
     fill: var(--primary-btn-color);
 }
+
+.stripes{
+    mask-image: linear-gradient(var(--angle), #75311a 10%, transparent 10%, transparent 20%, #75311a 20%, #75311a 30%, transparent 30%, transparent 40%, #75311a 40%, #75311a 50%, transparent 50%, transparent 60%, #75311a 60%, #75311a 70%, transparent 70%, transparent 80%, #75311a 80%, #75311a 90%, transparent 90%);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    animation: rotateStripes 5s linear infinite;
+}
+
+  
+@keyframes rotateStripes {
+    from {
+      --angle: 0deg;
+    }
+    to {
+      --angle: 360deg;
+    }
+  }
