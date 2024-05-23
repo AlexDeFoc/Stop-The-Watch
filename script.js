@@ -34,7 +34,6 @@ btn_reset.addEventListener("click", () => {
         amount = 0;
         updateDisplay(amount);
         window.localStorage.removeItem("score");
-        document.body.style.filter = ""; // Ensure filter is removed when reset
         console.log("Amount reset!");
         pauseClock(); // Make sure to clear any running intervals
     }
