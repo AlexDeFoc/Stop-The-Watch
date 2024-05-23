@@ -84,7 +84,7 @@ document.addEventListener("visibilitychange", () => {
             window.localStorage.setItem('score', JSON.stringify(amount));
             lastTimestamp = null;
         }
-        if (intervalId === null && lastTimestamp !== null) {
+        if (intervalId === null) {
             startStopwatch();
         }
     }
