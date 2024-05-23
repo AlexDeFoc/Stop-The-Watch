@@ -67,19 +67,21 @@ function pauseClock() {
 }
 
 function updateDisplay(amount) {
-    const milliseconds = amount % 1000;
+    const totalMillis = amount % 60000; // 60000 ms in a minute
+    const millis = Math.floor(totalMillis / 10) % 60; // Restrict to 59 milliseconds
     const totalSeconds = Math.floor(amount / 1000);
+    const minutes = Math.floor(totalSeconds / 60) % 60;
     const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
     let formattedTime;
 
-    if (totalSeconds < 3600) {
+    if (hours === 0 && minutes === 0 && seconds < 60) {
+        formattedTime = String(millis).padStart(2, '0');
+    } else if (hours === 0 && minutes < 60) {
         formattedTime = 
             String(minutes).padStart(2, '0') + ":" +
-            String(seconds).padStart(2, '0') + ":" +
-            String(Math.floor(milliseconds / 10)).padStart(2, '0');
+            String(seconds).padStart(2, '0');
     } else {
         formattedTime = 
             String(hours).padStart(2, '0') + ":" +
