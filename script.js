@@ -53,7 +53,7 @@ function startClock() {
         window.localStorage.setItem('score', JSON.stringify(amount));
     }, 1000);
 
-    document.body.style.filter = ""; // Remove the filter
+    btn.classList.remove("stripes"); // Remove the filter
     console.log("Stopwatch started!");
 }
 
@@ -62,7 +62,7 @@ function pauseClock() {
     intervalId = null;
     window.localStorage.removeItem('lastTimestamp');
     window.localStorage.setItem('running', JSON.stringify(false));
-    document.body.style.filter = "brightness(1500%) contrast(40%)"; // Add the filter
+    btn.classList.add("stripes"); // Add the filter
     console.log("Stopwatch paused!");
 }
 
@@ -109,7 +109,6 @@ function applyTheme(theme) {
     document.documentElement.style.setProperty("--primary-background-color", theme["--primary-background-color"]);
     document.documentElement.style.setProperty("--primary-text-color", theme["--primary-text-color"]);
     document.documentElement.style.setProperty("--primary-btn-color", theme["--primary-btn-color"]);
-    document.documentElement.style.setProperty("--secondary-btn-color", theme["--secondary-btn-color"]);
     document.documentElement.style.setProperty("--theme-icon-fill", theme["--theme-icon-fill"]);
     document.getElementById('theme-url').setAttribute("content", theme["theme-url-color"]);
 }
