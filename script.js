@@ -3,7 +3,7 @@ let btn = document.getElementsByClassName("clock")[0];
 let btn_reset = document.getElementsByClassName("clear-icon")[0];
 let theme_icon = document.getElementsByClassName("theme-icon")[0];
 
-let amount = 100000;
+let amount = 10000000;
 const factor = 10; // Update every 10 milliseconds
 let intervalId = null;
 
