@@ -23,7 +23,7 @@ if (window.localStorage.getItem('lastTimestamp') !== null) {
     const elapsed = now - lastTimestamp;
     amount += elapsed;
     updateDisplay(amount);
-    startClock();
+    startClock(); // Start the clock automatically if it was running
 } else {
     console.log("Clock was not running before reload.");
 }
