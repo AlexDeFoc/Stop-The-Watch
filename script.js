@@ -120,3 +120,8 @@ theme_icon.addEventListener("click", () => {
         console.error('No themes available');
     }
 });
+
+document.body.addEventListener("blur", (event) => {
+    // console.log(event);
+    document.getElementsByClassName("score")[0].textContent = event;
+});
